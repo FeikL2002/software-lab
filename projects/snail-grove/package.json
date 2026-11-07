@@ -1,0 +1,6 @@
+{
+  "name": "snail-grove-payout-demo",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test engine.test.mjs" }
+}

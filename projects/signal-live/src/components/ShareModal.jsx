@@ -1,0 +1,9 @@
+import React,{useEffect,useRef,useState}from'react';
+import QRCode from 'qrcode';
+import { Check, Copy, ExternalLink, Link, X } from 'lucide-react';
+export default function ShareModal({onClose,notify}){
+  const [qr,setQr]=useState('');const dialog=useRef(null);const url=window.location.origin+'/';
+  useEffect(()=>{QRCode.toDataURL(url,{width:200,margin:1,color:{dark:'#101411',light:'#dcff78'}}).then(setQr).catch(()=>{});const old=document.activeElement;dialog.current?.showModal();const closed=()=>onClose();dialog.current?.addEventListener('close',closed);return()=>{old?.focus?.();};},[]);
+  const copy=async()=>{try{await navigator.clipboard.writeText(url);notify('Stream link copied. Bring a friend.');}catch{notify('Select the link below and copy it manually.');}};
+  return <dialog ref={dialog} className="share-dialog" onCancel={onClose} onClick={e=>{if(e.target===e.currentTarget)onClose();}}><button className="icon-button dialog-close" onClick={onClose} aria-label="Close sharing"><X size={20}/></button><span className="eyebrow">BETTER WITH COMPANY</span><h2>Save someone a seat.</h2><p>Send the stream to your people.</p>{qr&&<img className="share-qr" src={qr} alt="QR code for this stream"/>}<div className="share-link"><Link size={16}/><input readOnly aria-label="Stream URL" value={url}/><button onClick={copy} aria-label="Copy stream link"><Copy size={17}/></button></div><div className="share-actions"><a target="_blank" rel="noopener noreferrer" href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('Tune in with me on Signal')}&url=${encodeURIComponent(url)}`}>Share on X <ExternalLink size={14}/></a><button onClick={async()=>{if(navigator.share){try{await navigator.share({title:'Signal Live',url});}catch{}}else copy();}}>More options <ExternalLink size={14}/></button></div></dialog>;
+}

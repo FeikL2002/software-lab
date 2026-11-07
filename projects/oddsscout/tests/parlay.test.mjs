@@ -1,0 +1,38 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {makeDemo,makeDemoForm} from './fixtures/demo.mjs';
+import {parlayGroups,compareParlay,recentTeamForm,rankGame,generateParlays,paperNet} from '../public/lib/parlays.mjs';
+const NOW=Date.parse('2026-10-14T05:00:00Z');
+const board=()=>makeDemo('all','h2h',NOW);
+const event=id=>board().events.find(e=>e.id===id);
+const leg=e=>{const group=parlayGroups(e,null,NOW)[0];return {event:e,groupId:group.id,selection:group.name};};
+const pair=()=>[leg(event('demo-nfl-2')),leg(event('demo-nba-2'))];
+const form=e=>makeDemoForm(e,NOW);
+test('Parlay multiplies each common book’s own prices, never cross-app maxima',()=>{
+ const legs=pair(),c=compareParlay(legs,{now:NOW});assert.equal(c.ok,true);assert.equal(c.books.length,4);
+ for(const b of c.books){const expected=legs.reduce((v,l)=>v*parlayGroups(l.event,null,NOW).find(g=>g.id===l.groupId).freshQuotes.find(q=>q.book===b.book).price,1);assert.ok(Math.abs(b.decimal-expected)<1e-10);}
+ assert.equal(c.estimated,true);assert.equal(c.best.decimal,Math.max(...c.books.map(b=>b.decimal)));
+});
+test('No common app means no valid parlay comparison',()=>{const p=pair();p[0].event.bookmakers=p[0].event.bookmakers.slice(0,1);p[1].event.bookmakers=p[1].event.bookmakers.slice(1,2);assert.equal(compareParlay(p,{now:NOW}).ok,false);});
+test('Book selection is respected across every leg',()=>{const c=compareParlay(pair(),{bookKeys:['fanduel'],now:NOW});assert.equal(c.books.length,1);assert.equal(c.best.book,'fanduel');});
+test('An empty bookmaker selection never falls back to other apps',()=>assert.equal(compareParlay(pair(),{bookKeys:[],now:NOW}).ok,false));
+test('Duplicate and opposing same-game legs are rejected',()=>{const a=pair()[0];assert.equal(compareParlay([a,a],{now:NOW}).ok,false);});
+test('Shared teams across different events are rejected',()=>{const p=pair();p[1]={...p[0],event:{...p[0].event,id:'different-game'}};assert.match(compareParlay(p,{now:NOW}).reason,/team appears/);});
+test('Three-way moneylines are not treated as two-way parlay legs',()=>assert.equal(parlayGroups(event('demo-soccer-2'),null,NOW).length,0));
+test('Already started games cannot be added',()=>assert.equal(parlayGroups(event('demo-nfl-1'),null,NOW).length,0));
+test('Stale quotes disable the whole ticket',()=>assert.equal(compareParlay(pair(),{now:NOW+181000}).ok,false));
+test('Missing timestamps cannot be used in parlay estimates',()=>{const p=pair();for(const b of p[0].event.bookmakers){b.last_update=null;b.markets[0].last_update=null;}assert.equal(compareParlay(p,{now:NOW}).ok,false);});
+test('Large snapshot timing differences are excluded even inside freshness window',()=>{const p=pair();for(const b of p[0].event.bookmakers)b.markets[0].last_update=new Date(NOW-165000).toISOString();assert.equal(compareParlay(p,{now:NOW}).ok,false);});
+test('Parlay length validation rejects one or five legs',()=>{assert.equal(compareParlay([pair()[0]],{now:NOW}).ok,false);assert.equal(compareParlay(Array(5).fill(pair()[0]),{now:NOW}).ok,false);});
+test('Custom period descriptions cannot masquerade as full-game moneylines',()=>{const e=event('demo-nfl-2');for(const b of e.bookmakers)b.markets[0].description='First half';assert.equal(parlayGroups(e,null,NOW).length,0);});
+test('Same-price whole-ticket ties are retained',()=>{const p=pair();for(const l of p){const one=l.event.bookmakers[0].markets;l.event.bookmakers=l.event.bookmakers.slice(0,2).map(b=>({...b,markets:structuredClone(one)}));}const c=compareParlay(p,{now:NOW});assert.equal(c.ties.length,2);});
+test('Recent form uses only finals before analysis time and limits to last five',()=>{const e=event('demo-nfl-2'),b=form(e);const f=recentTeamForm(e.away_team,b.games,{now:NOW,allowDemo:true});assert.equal(f.games,5);assert.equal(f.wins+f.losses+f.draws,5);assert.equal(f.rows[0].date,new Date(NOW-7*86400000).toISOString());});
+test('Form excludes future, unfinished, duplicate and malformed score rows',()=>{const e=event('demo-nba-2'),b=form(e),r=b.games[0];const rows=[r,r,{...r,id:'future',date:new Date(NOW+10000).toISOString()},{...r,id:'unfinished',completed:false},{...r,id:'nullscore',homeScore:null},{...r,id:'stringscore',homeScore:'110'}];assert.equal(recentTeamForm(e.away_team,rows,{now:NOW,allowDemo:true}).games,1);});
+test('Ten-game sample and venue splits have explicit denominators',()=>{const e=event('demo-nba-2'),f=recentTeamForm(e.away_team,form(e).games,{now:NOW,limit:10,allowDemo:true});assert.equal(f.games,10);assert.equal(f.home.games+f.away.games,10);assert.equal(f.home.games,5);});
+test('Ranked suggestions require correct mode and complete history',()=>{const e=event('demo-nba-2'),b=form(e);assert.equal(rankGame(e,b,{now:NOW,mode:'live'}).length,0);assert.equal(rankGame(e,{...b,complete:false},{now:NOW,mode:'demo'}).length,0);assert.equal(rankGame(e,b,{now:NOW,mode:'demo'}).length,2);});
+test('Sparse history and offseason gaps are not ranked',()=>{const e=event('demo-nfl-2'),b=form(e);assert.equal(rankGame(e,{...b,games:b.games.filter(g=>Date.parse(g.date)>NOW-15*86400000)},{now:NOW,mode:'demo'}).length,0);const old={...b,games:b.games.map(g=>({...g,date:new Date(Date.parse(g.date)-30*86400000).toISOString()}))};assert.equal(rankGame(e,old,{now:NOW,mode:'demo'}).length,0);});
+test('Out-of-date or future fetchedAt history cannot generate recommendations',()=>{const e=event('demo-nba-2'),b=form(e);for(const ms of [NOW-3600001,NOW+31000])assert.equal(rankGame(e,{...b,fetchedAt:new Date(ms).toISOString()},{now:NOW,mode:'demo'}).length,0);});
+test('Research weighting is explicit and not a reported win probability',()=>{const e=event('demo-nba-2'),r=rankGame(e,form(e),{now:NOW,mode:'demo'})[0];assert.ok(Math.abs(r.score-100*(.65*r.marketShare+.25*r.formShare+.1*r.venueShare))<1e-10);assert.equal(r.winProbability,undefined);assert.equal(r.expectedValue,undefined);});
+test('Generated combinations have requested length and unique games',()=>{const candidates=board().events.flatMap(e=>rankGame(e,form(e),{now:NOW,mode:'demo'}));for(const n of [2,3,4]){const plans=generateParlays(candidates,{legs:n,now:NOW});assert.equal(plans.length,3);for(const p of plans){assert.equal(p.legs.length,n);assert.equal(new Set(p.legs.map(l=>l.event.id)).size,n);assert.equal(p.comparison.ok,true);}}});
+test('No history gives no invented parlay recommendations',()=>assert.deepEqual(generateParlays([],{now:NOW}),[]));
+test('Paper tracking calculates won/lost/void without auto-settling pending tickets',()=>{const t={stake:10,decimal:3.5};assert.equal(paperNet({...t,result:'won'}),25);assert.equal(paperNet({...t,result:'lost'}),-10);assert.equal(paperNet({...t,result:'void'}),0);assert.equal(paperNet({...t,result:'pending'}),null);assert.equal(paperNet({...t,result:'won',stake:-1}),null);});

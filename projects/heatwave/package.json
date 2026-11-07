@@ -1,0 +1,7 @@
+{
+  "name": "heatwave-camera-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A browser-local simulated thermal color effect for camera video and images."
+}

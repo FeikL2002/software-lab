@@ -1,0 +1,16 @@
+node_modules/
+.env
+.env.*
+.venv/
+__pycache__/
+.wrangler/
+.next/
+.netlify/
+.openai/
+.data/
+release/
+*.sqlite
+*.sqlite3
+*.db
+*.log
+.DS_Store

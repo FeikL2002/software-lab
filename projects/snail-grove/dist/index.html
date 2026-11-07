@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171223">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2247%22 fill=%22%23171223%22/%3E%3Cpath d=%22M70 65C30 90 10 40 40 25C72 10 90 60 55 60C32 60 40 32 58 40%22 fill=%22none%22 stroke=%22%23cbb2ec%22 stroke-width=%2210%22 stroke-linecap=%22round%22/%3E%3C/svg%3E">
+  <meta name="description" content="An original snail-themed game demo. Explore random outcomes, choose a result, or schedule a payout using pretend credits with no cash value.">
+  <title>Snail Grove — Payout Lab</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <svg class="symbol-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="shell-gradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5b1e9"/><stop offset="1" stop-color="#a375ec"/></linearGradient>
+      <symbol id="icon-snail" viewBox="0 0 100 100"><path d="M12 77c0-6 9-9 17-10l43-3 6-20c1-4 7-3 7 1l-1 21c10 0 12 10 3 14-18 7-52 6-70 3-4-1-5-3-5-6Z" fill="#caef81" stroke="#2f332c" stroke-width="3"/><circle cx="43" cy="49" r="29" fill="url(#shell-gradient)" stroke="#453450" stroke-width="3"/><path d="M47 66C25 67 24 34 43 32c19-3 26 25 8 25-12 0-13-16-3-15" fill="none" stroke="#694d8b" stroke-width="5" stroke-linecap="round"/><path d="m78 45-2-16m9 17 7-13" stroke="#caef81" stroke-width="5" stroke-linecap="round"/><circle cx="76" cy="28" r="5" fill="#e8ffd3"/><circle cx="93" cy="31" r="5" fill="#e8ffd3"/><circle cx="77" cy="28" r="2.5" fill="#302c3c"/><circle cx="94" cy="31" r="2.5" fill="#302c3c"/><path d="M81 68q5 5 9 0" fill="none" stroke="#3e5630" stroke-width="2.5" stroke-linecap="round"/></symbol>
+      <symbol id="icon-mushroom" viewBox="0 0 100 100"><path d="m40 54-5 30q15 7 30 0l-5-30" fill="#fff1c3" stroke="#71516f" stroke-width="3"/><path d="M10 55C13 4 86 4 91 55c-22 12-60 12-81 0Z" fill="#ed9ac7" stroke="#71516f" stroke-width="3"/><ellipse cx="33" cy="35" rx="9" ry="7" fill="#fff5d6"/><ellipse cx="65" cy="29" rx="7" ry="6" fill="#fff5d6"/><ellipse cx="74" cy="49" rx="7" ry="5" fill="#fff5d6"/><path d="M45 72v8" stroke="#bea887" stroke-width="3" stroke-linecap="round"/></symbol>
+      <symbol id="icon-leaf" viewBox="0 0 100 100"><path d="M18 76C-1 31 42 12 86 13c-1 47-21 83-68 63Z" fill="#b6e79b" stroke="#4b7061" stroke-width="3"/><path d="m13 87 58-59M30 68l-4-24m20 8 23 1M46 51l-1-20" stroke="#4b7061" stroke-width="4" fill="none" stroke-linecap="round"/></symbol>
+      <symbol id="icon-moon" viewBox="0 0 100 100"><path d="M74 12C41 15 34 57 70 70c7 2 14 2 20 0C63 111 8 86 13 50 16 25 40 7 65 10Z" fill="#f1d38f" stroke="#957153" stroke-width="3"/><path d="m76 28 3 9 9 3-9 3-3 9-3-9-9-3 9-3Z" fill="#fff6cd"/></symbol>
+      <symbol id="icon-berry" viewBox="0 0 100 100"><path d="M50 42q-7-26 18-30m-18 28Q28 17 16 31q12 15 34 9" fill="#b3df90" stroke="#536955" stroke-width="3"/><circle cx="34" cy="60" r="22" fill="#b998f4" stroke="#71568d" stroke-width="3"/><circle cx="64" cy="65" r="22" fill="#d4a4ef" stroke="#71568d" stroke-width="3"/><path d="m24 49 5-3m26 8 5-3" stroke="#f5d6fb" stroke-width="6" stroke-linecap="round"/></symbol>
+      <symbol id="icon-spark" viewBox="0 0 100 100"><path d="m50 8 12 30 30 12-30 12-12 30-12-30L8 50l30-12Z" fill="currentColor"/></symbol>
+    </defs>
+  </svg>
+  <header class="site-header">
+    <a class="brand" href="#game" aria-label="Snail Grove home"><span class="brand-icon"><svg aria-hidden="true"><use href="#icon-snail"/></svg></span><span>snail grove<span class="brand-sub">PAYOUT LAB</span></span></a>
+    <span class="demo-badge"><span class="status-dot"></span>PRETEND CREDITS · NO CASH VALUE</span>
+    <button class="quiet-button" id="reset-button" type="button">Reset demo <span aria-hidden="true">↺</span></button>
+  </header>
+  <main id="game">
+    <div class="page-intro"><div><p class="eyebrow">A PLAYABLE LOOK BEHIND THE REELS</p><h1>A little luck.<br> <em>A lot of code.</em></h1></div><p class="intro-copy">Who decides when a game pays?<br> Here, you do. Change the outcome, spin the reels, and watch the math.</p></div>
+    <div class="workspace">
+      <section class="game-shell" aria-label="Snail Grove pretend-credit game">
+        <div class="game-topline"><span class="garden-label"><span aria-hidden="true">✦</span> THE MIDNIGHT GARDEN</span><span class="round-label">ROUND <span id="round-count">00</span></span></div>
+        <div class="scene">
+          <span class="scene-orb orb-one" aria-hidden="true"></span><span class="scene-orb orb-two" aria-hidden="true"></span>
+          <svg class="scene-spark spark-one" aria-hidden="true"><use href="#icon-spark"/></svg><svg class="scene-spark spark-two" aria-hidden="true"><use href="#icon-spark"/></svg>
+          <div class="scene-title">SNAIL <span>GROVE</span><svg class="mascot" aria-hidden="true"><use href="#icon-snail"/></svg></div>
+          <p class="scene-tagline">slow reels. transparent results.</p>
+          <div class="machine-frame"><div class="payline-label" aria-hidden="true">PAY<br>LINE <span>›</span></div><div class="reel-window" id="reel-window" aria-label="Three reel slots; middle row is the payout line"><div class="reel" id="reel-0"></div><div class="reel" id="reel-1"></div><div class="reel" id="reel-2"></div></div><span class="payline-edge" aria-hidden="true">‹</span></div>
+          <div class="result-banner" id="result-banner" role="status" aria-live="polite"><span class="result-kicker" id="result-kicker">YOU'RE THE DIRECTOR</span><strong id="result-text">Your next result is 10×</strong><span id="result-detail">Set the outcome on the right. Then give it a spin.</span></div>
+        </div>
+        <div class="game-dashboard"><div class="stat"><span>DEMO BALANCE</span><strong id="balance">100.00 <small>cr</small></strong></div><div class="stat"><span>LAST RETURN</span><strong id="last-return">0.00 <small>cr</small></strong></div><div class="stat"><span>SESSION PROFIT</span><strong id="session-profit">+0.00 <small>cr</small></strong></div></div>
+        <div class="spin-controls"><fieldset class="stake-control"><legend>PLAY AMOUNT <span>pretend credits</span></legend><div class="stake-buttons"><button type="button" data-stake="0.1" aria-pressed="false">0.10</button><button type="button" data-stake="0.25" aria-pressed="false">0.25</button><button type="button" data-stake="0.5" aria-pressed="false">0.50</button><button type="button" data-stake="1" aria-pressed="true">1.00</button></div></fieldset><button class="spin-button" id="spin-button" type="button"><span id="spin-label">SPIN THE GROVE</span><svg aria-hidden="true"><use href="#icon-spark"/></svg></button></div>
+        <div class="game-footnote"><span id="mode-indicator">DIRECTED DEMO</span><span>All credits are fictional. Nothing to buy or redeem.</span></div>
+      </section>
+      <aside class="control-panel" aria-labelledby="control-heading">
+        <div class="control-heading"><span class="control-icon" aria-hidden="true">⌘</span><div><p class="eyebrow">THE OUTCOME ENGINE</p><h2 id="control-heading">Behind the curtain</h2></div></div>
+        <p class="control-description">This panel is part of the demo. Every scripted result stays visible to the player.</p>
+        <fieldset class="mode-picker"><legend>01 <span>CHOOSE HOW IT WORKS</span></legend><label class="mode-option"><input type="radio" name="mode" value="directed" checked><span><strong>Direct the result</strong><small>You choose what the next spin returns.</small></span><span class="radio-mark" aria-hidden="true"></span></label><label class="mode-option"><input type="radio" name="mode" value="schedule"><span><strong>Schedule a payout</strong><small>Pick the interval and the return.</small></span><span class="radio-mark" aria-hidden="true"></span></label><label class="mode-option"><input type="radio" name="mode" value="random"><span><strong>Random draws</strong><small>Fixed probabilities. No winning schedule.</small></span><span class="radio-mark" aria-hidden="true"></span></label></fieldset>
+        <div class="mode-settings" id="directed-settings"><label class="field-label" for="directed-outcome">02 <span>SET THE NEXT RESULT</span></label><select id="directed-outcome"><option value="0">0× · No return</option><option value="1">1× · Bet returned</option><option value="2">2× · Leaf trio</option><option value="5">5× · Moon trio</option><option value="10" selected>10× · Snail trio</option></select><p class="field-hint">This exact multiplier is used for each spin until you change it.</p></div>
+        <div class="mode-settings" id="schedule-settings" hidden><div class="schedule-grid"><div><label class="field-label" for="schedule-every">PAY EVERY</label><select id="schedule-every"><option value="3">3 rounds</option><option value="5" selected>5 rounds</option><option value="10">10 rounds</option></select></div><div><label class="field-label" for="schedule-outcome">RETURN</label><select id="schedule-outcome"><option value="2">2×</option><option value="5" selected>5×</option><option value="10">10×</option></select></div></div><p class="field-hint">Other scheduled rounds return 0×. Changing these settings restarts the count.</p><div class="schedule-progress" id="schedule-progress"></div></div>
+        <div class="mode-settings" id="random-settings" hidden><div class="random-note"><span aria-hidden="true">↝</span><p>Each spin draws a fresh number using your browser's cryptographic random generator.</p></div><p class="field-hint">The sample payout table below has a theoretical 99% return in Random mode. Short sessions can vary widely.</p></div>
+        <div class="next-preview" id="next-preview"><span>NEXT SPIN</span><strong id="next-preview-value">10× · Directed</strong><p id="next-preview-detail">1.00 cr played → 10.00 cr returned</p></div>
+        <details class="paytable-details"><summary>See the math <span aria-hidden="true">＋</span></summary><p>In Random mode only. A trio on the middle row shows the selected payout.</p><table class="paytable"><thead><tr><th>Middle row</th><th>Return</th><th>Chance</th></tr></thead><tbody><tr><td>No trio</td><td>0×</td><td>55%</td></tr><tr><td>Mushrooms</td><td>1×</td><td>25%</td></tr><tr><td>Leaves</td><td>2×</td><td>12%</td></tr><tr><td>Moons</td><td>5×</td><td>6%</td></tr><tr><td>Snails</td><td>10×</td><td>2%</td></tr></tbody></table><p class="math-formula">(0 × .55) + (1 × .25) + (2 × .12) + (5 × .06) + (10 × .02) = <strong>0.99</strong></p><p>99% is an expected return per credit played across many random spins, not a promise for your balance. Scripted modes do not use these probabilities.</p></details>
+      </aside>
+    </div>
+    <section class="history-section" aria-labelledby="history-heading"><div class="section-heading"><div><p class="eyebrow">NOTHING UP OUR SHELL</p><h2 id="history-heading">The spin ledger</h2></div><span class="history-note">Every decision, in the open.</span></div><div class="history-wrap"><table class="history-table"><thead><tr><th>Round</th><th>Source</th><th>Played</th><th>Multiplier</th><th>Returned</th><th>Net result</th></tr></thead><tbody id="history-body"><tr class="empty-history"><td colspan="6">Your first spin starts the story. All results stay in this session.</td></tr></tbody></table></div></section>
+    <section class="how-it-works" aria-label="How this demo works"><article><span>01</span><div><h3>The code picks an outcome.</h3><p>Choose it yourself, schedule it, or let the sample probability table decide.</p></div></article><article><span>02</span><div><h3>The math settles the credits.</h3><p>Return = amount played × multiplier. Profit = return − amount played.</p></div></article><article><span>03</span><div><h3>The reels tell the story.</h3><p>The animation reveals an outcome already selected. It doesn't create it.</p></div></article></section>
+  </main>
+  <footer class="site-footer"><span>snail grove <span aria-hidden="true">✦</span> an original interactive demo</span><p>Fictional credits only. No deposits, withdrawals, prizes, or cash value. Runs in your browser; no saved account. Independent of Stake and Donut Gaming.</p></footer>
+</body>
+</html>

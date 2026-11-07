@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f3ed">
+  <meta name="description" content="Turn a phone camera, webcam, or photo into a vivid heat-style color effect. Private, browser-based, and made for exploring color.">
+  <title>HEATWAVE — A different kind of camera</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23f46037'/%3E%3Cpath d='M11 11v18m9-18v18m9-18v18M11 20h18' stroke='%231d211f' stroke-width='4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="icon-camera" viewBox="0 0 24 24"><path d="M8 5 6.5 8H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-2.5L16 5Z"/><circle cx="12" cy="14" r="4"/></symbol>
+    <symbol id="icon-flip" viewBox="0 0 24 24"><path d="M20 7h-5V2M4 17h5v5M20 7a9 9 0 0 0-15-3M4 17a9 9 0 0 0 15 3"/></symbol>
+    <symbol id="icon-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+    <symbol id="icon-save" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v6h16v-6"/></symbol>
+    <symbol id="icon-expand" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m8 0h5v-5"/></symbol>
+    <symbol id="icon-compare" viewBox="0 0 24 24"><path d="M12 3v18M8 5H3v14h5m8-14h5v14h-5"/></symbol>
+    <symbol id="icon-mirror" viewBox="0 0 24 24"><path d="M12 3v2m0 3v2m0 3v2m0 3v3M8 6 2 18h6Zm8 0 6 12h-6Z"/></symbol>
+    <symbol id="icon-reset" viewBox="0 0 24 24"><path d="M3 4v6h6M4 10a8 8 0 1 1 1 8"/></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 4-3 7-8 9-5-2-8-5-8-9V6Z"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+    <symbol id="icon-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></symbol>
+  </defs></svg>
+  <div class="shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Heatwave home"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i></span>HEATWAVE</a>
+      <div class="header-note"><span class="tiny-dot"></span>A DIFFERENT KIND OF CAMERA</div>
+      <a class="header-link" href="#about">How it works <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="pageTitle">
+        <div><div class="eyebrow"><span class="eyebrow-line"></span>LIGHT IN. COLOR OUT.</div><h1 id="pageTitle">Make the ordinary<br><span>look extraordinary.</span></h1></div>
+        <div class="intro-side"><p>Your camera. A whole new spectrum.<br>Explore a live heat-style effect,<br>then capture a little color.</p><span class="privacy-pill"><svg class="icon" aria-hidden="true"><use href="#icon-shield"/></svg> Private by design</span></div>
+      </section>
+
+      <section class="workspace" aria-label="Camera color studio">
+        <div class="viewer-column">
+          <div class="camera-actions"><button class="button primary-button" id="startCamera" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-camera"/></svg><span>Start camera</span><span class="button-shortcut" aria-hidden="true">↗</span></button><button class="button soft-button" id="uploadImage" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-upload"/></svg><span>Open photo</span></button><button class="button quiet-button" id="sampleButton" type="button">Use sample</button><input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp" hidden></div>
+          <div class="monitor">
+            <div class="monitor-top"><div class="monitor-label"><span class="monitor-dot" id="statusDot"></span><span id="statusText">Ready to explore</span></div><span class="effect-badge">SIMULATED COLOR EFFECT</span></div>
+            <div class="stage" id="stage">
+              <span class="fullscreen-effect">SIMULATED COLOR EFFECT</span>
+              <canvas id="output" width="1280" height="800" aria-label="Camera or sample image with a simulated heat-style color effect"></canvas>
+              <video id="video" playsinline muted autoplay hidden></video>
+              <div class="stage-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              <span class="stage-badge" id="stageBadge">Sample image</span>
+              <button class="fullscreen-button" id="fullscreen" type="button" title="Full screen" aria-label="Open preview in full screen"><svg class="icon" aria-hidden="true"><use href="#icon-expand"/></svg></button>
+              <div class="spectrum-legend" aria-hidden="true"><span>BRIGHT</span><div></div><span>DARK</span></div>
+            </div>
+            <div class="monitor-bottom"><div><span class="instrument-label">SOURCE</span><span id="sourceLabel">Sample scene</span></div><div class="monitor-metrics"><span id="resolutionLabel">1280 × 800</span><span class="metric-divider">/</span><span id="fpsLabel">STILL</span></div></div>
+          </div>
+          <div class="notice" id="notice" role="status" aria-live="polite">Try the sample, open a photo, or start your camera. Camera access begins only when you choose Start camera.</div>
+          <div class="reality-note"><span class="note-symbol" aria-hidden="true">i</span><p>This is a visual effect. Colors map image brightness; heat is not measured. It cannot see through walls.</p></div>
+        </div>
+
+        <aside class="control-panel" aria-labelledby="controlsTitle">
+          <div class="panel-heading"><div><div class="eyebrow">THE COLOR LAB</div><h2 id="controlsTitle">Find your frequency.</h2></div><span class="panel-number">01—04</span></div>
+
+          <fieldset class="palette-section"><legend class="section-label"><span>01</span> Choose a palette</legend><div class="palette-grid" id="paletteButtons"><button class="palette-button" data-palette="ember" aria-pressed="true" type="button"><span class="palette-swatch ember"></span><span>Ember</span><span class="palette-check" aria-hidden="true">✓</span></button><button class="palette-button" data-palette="arctic" aria-pressed="false" type="button"><span class="palette-swatch arctic"></span><span>Arctic</span><span class="palette-check" aria-hidden="true">✓</span></button><button class="palette-button" data-palette="spectrum" aria-pressed="false" type="button"><span class="palette-swatch spectrum"></span><span>Spectrum</span><span class="palette-check" aria-hidden="true">✓</span></button><button class="palette-button" data-palette="mono" aria-pressed="false" type="button"><span class="palette-swatch mono"></span><span>Monochrome</span><span class="palette-check" aria-hidden="true">✓</span></button></div></fieldset>
+
+          <fieldset class="adjustment-section"><legend class="section-label"><span>02</span> Shape the image</legend><div class="range-control"><div class="range-label"><label for="contrast">Contrast</label><output id="contrastValue" for="contrast">1.15×</output></div><input type="range" id="contrast" min="0.4" max="2" step="0.05" value="1.15"></div><div class="range-control"><div class="range-label"><label for="exposure">Exposure</label><output id="exposureValue" for="exposure">0.00</output></div><input type="range" id="exposure" min="-0.4" max="0.4" step="0.01" value="0"></div><div class="range-control"><div class="range-label"><label for="smoothing">Smoothness</label><output id="smoothingValue" for="smoothing">15%</output></div><input type="range" id="smoothing" min="0" max="1" step="0.05" value="0.15"></div><label class="invert-control" for="invert"><span>Reverse the spectrum</span><input type="checkbox" id="invert"><span class="switch-track" aria-hidden="true"></span></label></fieldset>
+
+          <fieldset class="view-section"><legend class="section-label"><span>03</span> Set your view</legend><label class="select-label" for="sourceSelect">Camera source</label><select id="sourceSelect"><option value="">Auto camera</option></select><div class="view-buttons"><button class="button control-button" id="comparison" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-compare"/></svg> Compare</button><button class="button control-button" id="mirror" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#icon-mirror"/></svg> Mirror</button></div><div class="transport-buttons"><button class="text-button" id="switchCamera" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#icon-flip"/></svg>Flip</button><button class="text-button" id="freezeFrame" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#icon-pause"/></svg>Freeze</button><button class="text-button" id="stopCamera" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#icon-stop"/></svg>Stop</button></div></fieldset>
+
+          <div class="capture-section"><div class="section-label"><span>04</span> Keep the moment</div><button class="button save-button" id="saveSnapshot" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-save"/></svg> Save snapshot <span>PNG</span></button><button class="reset-button" id="resetControls" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-reset"/></svg> Reset adjustments</button></div>
+        </aside>
+      </section>
+
+      <section class="about" id="about" aria-label="About this visual effect"><div class="about-title"><span class="eyebrow">A FRESH PERSPECTIVE</span><h2>Inspired by heat.<br>Powered by light.</h2></div><div class="about-copy"><p>HEATWAVE remaps the brightness in your camera or photo into a vivid color palette. Move closer, change the light, and see what happens.</p><p>It works with an ordinary phone camera or webcam. No temperature readings, body-energy detection, or through-wall imaging. Your frames stay in your browser.</p></div><div class="about-stamp" aria-hidden="true"><div class="stamp-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span>JUST ADD CURIOSITY.</span></div></section>
+    </main>
+    <footer class="site-footer"><span>HEATWAVE <span class="footer-muted">/</span> A browser color experiment.</span><span>Made for a different view. <span class="orange-dot"></span></span></footer>
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

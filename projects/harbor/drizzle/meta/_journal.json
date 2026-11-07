@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1791956073220,
+      "tag": "0000_magenta_mordo",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1791957873621,
+      "tag": "0001_amazing_ultron",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1791959483876,
+      "tag": "0002_material_bromley",
+      "breakpoints": true
+    }
+  ]
+}

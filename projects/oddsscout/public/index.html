@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+ <meta name="color-scheme" content="dark"><meta name="theme-color" content="#0a101d"><meta name="description" content="Compare the same bet across sportsbooks. Provider-supplied odds, clear price comparisons, and an optional AI explainer.">
+ <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">
+ <title>OddsScout — Sports analytics & live prices</title>
+ <link rel="icon" href="/icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/icon-192.png"><link rel="manifest" href="/manifest.webmanifest"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/calendar.css">
+ <script src="/app.mjs" type="module"></script>
+</head>
+<body>
+ <a class="skip" href="#board">Skip to odds board</a>
+ <aside class="sidebar" aria-label="Main navigation">
+  <a class="brand" href="/" aria-label="OddsScout home"><img src="/icon.svg" alt="" width="34" height="34"><span>odds<span class="brand-light">scout</span><sup>↗</sup></span></a>
+  <div class="side-label">YOUR LINEUP</div>
+  <button class="nav-item active" data-nav="board"><span class="nav-symbol">▦</span> Odds board <span class="nav-dot"></span></button>
+  <button class="nav-item" data-calendar-open><span class="nav-symbol">▦</span> Events Calendar</button>
+  <button class="nav-item" data-nav="favorites"><span class="nav-symbol">☆</span> Watchlist <span class="count" id="favorites-count">0</span></button>
+  <button class="nav-item" data-open="tracker"><span class="nav-symbol">☆</span> My Bets <span class="count" data-my-bets-count>0</span></button>
+  <button class="nav-item" data-open="winnings"><span class="nav-symbol">↗</span> All Winnings</button>
+  <button class="nav-item" data-open="chat"><span class="nav-symbol">☷</span> Community chat</button>
+  <button class="nav-item" data-open="player-stats"><span class="nav-symbol">▥</span> Player Stats</button>
+  <button class="nav-item" data-open="account"><span class="nav-symbol">◉</span> Your account</button>
+  <button class="nav-item" data-open="guide"><span class="nav-symbol">◈</span> How it works</button>
+  <div class="side-rule"></div><div class="side-label">QUICK LEAGUES</div>
+  <div id="quick-leagues" class="quick-leagues"></div>
+  <button class="nav-item" data-open="lab"><span class="nav-symbol">▤</span> Parlay Lab</button>
+  <div class="side-bottom">
+   <div class="private-note"><span class="tiny-square">↗</span><strong>The number. Not the hype.</strong><p>Compare prices.<br>Make your own call.</p></div>
+   <button class="nav-item setup-nav" data-open="settings"><span class="nav-symbol">⚙</span> Setup & preferences</button>
+   <div class="built-by">RESEARCH. COMPARE. KEEP PERSPECTIVE.</div>
+  </div>
+ </aside>
+ <div class="page-shell">
+  <header class="topbar">
+   <a class="mobile-brand" href="/"><img src="/icon.svg" alt="" width="29" height="29">oddsscout</a>
+   <div class="breadcrumb"><span class="studio-dot"></span><strong>SPORTS INTELLIGENCE</strong><span> / </span><span>21+</span></div>
+   <div class="top-actions"><button class="button" data-lock-preview>Lock app</button><span class="feed-pill" id="feed-pill"><i></i>Connecting</span><button class="icon-btn" data-open="settings" aria-label="Open settings" title="Settings">⚙</button><button class="button share-button" id="share-site"><span>↗</span> Share app</button><button class="button top-my-bets" data-open="tracker">☆ My Bets</button></div>
+  </header>
+  <main>
+
+   <div class="notice" id="notice" role="status">Connecting to the data feed…</div>
+   <div class="error-banner hidden" id="error-banner" role="alert"></div>
+   <div class="research-break-banner hidden" id="research-break-banner" role="status"></div>
+   <section class="stats hidden" aria-label="Board overview">
+    <div class="stat"><div class="stat-label"><span class="dot-green"></span> <span id="live-stat-label">GAMES RETURNED</span></div><div class="stat-main"><strong id="stat-live">—</strong><span>live + upcoming</span></div></div>
+    <div class="stat"><div class="stat-label">SPORTSBOOKS RETURNED</div><div class="stat-main"><strong id="stat-books">—</strong><span>with quotes</span></div></div>
+    <div class="stat"><div class="stat-label">LAST FEED SNAPSHOT</div><div class="stat-main"><strong class="time-stat" id="stat-updated">—</strong><span id="stat-age">Not loaded</span></div></div>
+   </section>
+   <section class="upgrade-hero"><div><span class="eyebrow">YOUR RESEARCH ADVANTAGE</span><h1>Better information.<br><span>Clearer decisions.</span></h1><p>Live market prices, real performance, and context you can inspect.<br>Know the numbers before you make your own call.</p><div class="hero-actions"><button class="button" data-calendar-open>Events Calendar ↗</button><button class="button primary" data-open="lab">Explore Parlay Lab ↗</button><button class="button" data-open="scout">✧ Ask Scout</button></div></div><div class="hero-scout"><span>↗</span><p>THE PRICE IS DATA.<br>THE OUTCOME IS UNCERTAIN.</p><small>No guaranteed picks. No wagers placed.</small></div></section>
+   <section class="dash-grid" id="dash-cards" aria-label="Research dashboard"></section>
+   <section id="calendar-section" class="calendar-section hidden" aria-label="Events Calendar"></section>
+   <div class="daily-tabs" aria-label="League shortcuts"><button data-calendar-open>▦ Calendar</button><button data-day="today">Today</button><button data-status="live">◉ Live</button><button data-league="americanfootball_nfl">NFL</button><button data-league="americanfootball_ncaaf">NCAAF</button><button data-league="basketball_nba">NBA</button><button data-league="basketball_ncaab">NCAAB</button><button data-league="icehockey_nhl">NHL</button><button data-league="baseball_mlb">MLB</button><button data-open="filters">More +</button></div>
+   <div class="content-grid">
+    <section class="board-column" id="board">
+     <div class="section-heading"><div><h2 id="board-title">All games<span class="tiny-arrow">↗</span></h2><p id="board-subtitle">Compare like for like. No guesswork.</p></div><button id="refresh" class="button refresh-button"><span id="refresh-symbol">↻</span> Refresh</button></div>
+     <label class="board-search" for="board-search"><span aria-hidden="true">⌕</span><input type="search" id="board-search" placeholder="Find a team, game or league…" autocomplete="off"><span class="search-hint">SEARCH THE LOADED BOARD</span></label>
+     <div id="sport-chips" class="sport-chips" role="group" aria-label="Filter by sport"></div>
+     <div class="board-controls">
+      <div class="status-tabs" role="group" aria-label="Game status">
+       <button class="active" data-status="all">All games <span id="all-count">0</span></button><button data-status="live">Live bets <span id="live-count">0</span></button><button data-status="upcoming">Upcoming <span id="upcoming-count">0</span></button><button data-status="unknown">Unconfirmed <span id="unknown-count">0</span></button>
+      </div>
+
+      <div class="book-filter" role="group" aria-label="Sportsbook scope"><button data-book-mode="all" class="active">All books</button><button data-book-mode="my">My books</button><button data-book-mode="best">Best odds</button><button class="text-button" data-open="preferences">Personalize ↗</button></div><p id="book-scope-note" class="book-scope-note" role="status">All provider-returned books. Compare the same outcome and exact line.</p><div class="market-row"><div class="market-tabs" role="group" aria-label="Betting market"><button class="active" data-market="h2h">Moneyline</button><button data-market="spreads">Spreads</button><button data-market="totals">Totals</button><button data-open="markets">Props & futures ↗</button></div><button class="button filter-button" data-open="filters">Filters <span aria-hidden="true">☷</span></button></div>
+     </div>
+     <div class="live-board-note hidden" id="live-board-note"><b>LIVE / IN-PLAY COMPARISONS</b><span>Quotes must be recent and after kickoff. Live scores and prices can lag. A save captures a snapshot; only the sportsbook confirms the accepted price. No live-parlay recommendations.</span></div>
+     <div class="coverage-strip"><span id="coverage-summary">Waiting for the odds feed</span><button class="text-button" data-open="settings">Choose apps ↗</button></div><div class="board-loading hidden" id="board-loading" role="status"><span class="loading-dot"></span><span id="loading-label">Loading games…</span><button class="text-button" data-stop-scan>Stop scan</button></div>
+     <div id="games" class="games" aria-live="polite"></div>
+     <p class="coverage-caption" id="coverage-caption"></p><details class="coverage-details"><summary>Coverage & missing leagues</summary><p class="coverage-note" id="coverage-note"></p></details>
+    </section>
+
+   </div>
+   <footer><span><b>odds<span>scout</span></b> &nbsp; 21+ · Comparison only · No bets placed</span><button class="text-button" data-open="responsible">Responsible gambling ↗</button><p>Use only where lawful. Prices, settlement rules, and book availability can vary by location. Always verify in the sportsbook. Not affiliated with any sportsbook.</p></footer>
+  </main>
+ </div>
+ <nav class="mobile-nav" aria-label="Mobile navigation"><button class="active" data-mobile-page="home" data-nav="board"><span aria-hidden="true">⌂</span>Home</button><button data-mobile-page="live" data-status="live"><span aria-hidden="true">◉</span>Live</button><button id="mobile-assistant" data-mobile-page="scout"><span aria-hidden="true">✧</span>Scout</button><button data-mobile-page="parlay" data-open="lab"><span aria-hidden="true">▤</span>Parlay</button><button data-mobile-page="saved" data-open="tracker"><span aria-hidden="true">☆</span>Saved</button></nav>
+ <button class="scout-float" data-open="scout" aria-label="Open Scout AI">✧ <span>Scout AI</span></button>
+ <button class="ticket-dock hidden" id="ticket-dock" data-open="lab">My parlay <span id="ticket-count">0</span> <span>↑</span></button>
+ <dialog id="compare-dialog" class="modal compare-dialog"><div class="modal-heading"><div><span class="eyebrow">APPS, ODDS & PAYOUTS</span><h2>Compare this game</h2></div><button class="icon-btn" data-close="compare-dialog" aria-label="Close game comparison">×</button></div>    <aside class="insight-column" id="insights" aria-label="Comparison details and odds assistant">
+     <section class="insight-panel">
+      <div class="insight-header"><span class="sparkle">✧</span><div><h2>Odds assistant</h2><p id="assistant-mode">Rules-based explainer</p></div><span class="mini-badge">SCOUT</span></div>
+      <div id="selection-detail"></div>
+      <div class="assistant-body">
+       <div class="assistant-chips"><button data-question="Explain this price and which book offers the highest payout.">Explain this price ↗</button><button data-question="Do the best odds mean this team is more likely to win?">Odds ≠ win chance</button></div>
+       <div class="answer-box" id="answer-box"><span class="answer-label">THE SCOUT NOTE</span><p id="answer">Select a game to compare the same outcome across sportsbooks. No made-up predictions. Just the numbers.</p><div id="answer-note" class="answer-note"></div></div>
+       <form id="ask-form"><label class="sr-only" for="question">Ask about the selected odds</label><div class="ask-field"><textarea id="question" rows="2" maxlength="600" placeholder="Ask about this game’s odds…"></textarea><button type="submit" id="ask-submit" aria-label="Send question">↗</button></div></form>
+       <p class="assistant-disclaimer">Best price is not a prediction. AI, when connected, explains the table—it does not choose a winner.</p>
+      </div>
+     </section>
+     <div class="how-card"><span class="how-icon">≠</span><div><h3>A better price. Not a sure thing.</h3><p>+140 pays more than +120 on the same winning bet. It doesn’t make the bet more likely to win.</p><button class="text-button" data-open="guide">Understand the numbers ↗</button></div></div>
+     <div class="refresh-card"><div><strong>Auto-refresh</strong><p>Off by default to protect API credits.</p></div><label class="toggle"><input type="checkbox" id="auto-refresh"><span class="toggle-track"></span><span class="sr-only">Refresh every 60 seconds</span></label></div>
+     <p id="usage-note" class="usage-note">Manual refresh · no background polling</p>
+    </aside></dialog>
+ <dialog id="filters-dialog" class="modal filters-dialog"><div class="modal-heading"><div><span class="eyebrow">NARROW THE BOARD</span><h2>Find your game</h2></div><button class="icon-btn" data-close="filters-dialog" aria-label="Close game filters">×</button></div><p class="muted">Search teams, choose a league or date, and adjust your example payout.</p><div class="search-row"><label class="search-box"><span aria-hidden="true">⌕</span><input type="search" id="search" placeholder="Search teams or leagues…" aria-label="Search teams or leagues"></label><label class="league-box"><span class="sr-only">Select league</span><select id="league"><option value="all">All leagues</option></select></label><label class="date-box"><span class="sr-only">Game date</span><select id="date-range"><option value="all">All dates</option><option value="today">Today</option><option value="tomorrow">Tomorrow</option><option value="week">Next 7 days</option></select></label></div><div class="filter-preferences"><label class="board-stake-label" for="board-stake">Example stake <span>$<input id="board-stake" type="number" inputmode="decimal" min="0" max="100000" step="0.01" value="25"></span></label><label class="format-picker"><span class="sr-only">Odds format</span><select id="odds-format"><option value="american">American odds</option><option value="decimal">Decimal odds</option></select></label></div><button class="button primary full-width" id="filters-show" data-close="filters-dialog">Show games</button><button class="text-button full-width" data-reset>Clear game filters</button></dialog>
+ <dialog id="settings-dialog" class="modal"><div class="modal-heading"><div><span class="eyebrow">YOUR WORKSPACE</span><h2>Setup & preferences</h2></div><button class="icon-btn" data-close="settings-dialog" aria-label="Close settings">×</button></div>
+  <div class="setup-status" id="setup-status"></div><div id="connection-checks" class="connection-checks" aria-label="API connection checks"></div><div class="setup-actions"><button class="button" data-retry>Retry connection</button></div>
+  <h3>Private entry</h3><p>The entry code unlocks this browser for up to eight hours. Lock the app when you are finished. Account sign-out is separate. Guest bet records stay on this browser.</p><button class="button" data-lock-preview>Lock app now</button>
+  <h3>Your betting apps</h3><p class="muted">Choose accounts you use. The My Books filter applies these preferences; All Books compares the entire returned feed. Book eligibility is verified by the sportsbook.</p><div id="book-options" class="book-options"></div>
+  <h3>Connect real odds</h3><p>Deploy the full project through Git or Netlify CLI. In Netlify’s environment variables, add <code>ODDS_API_KEY</code> with your key from <a href="https://the-odds-api.com/" target="_blank" rel="noopener noreferrer">The Odds API</a>, include the Functions scope and your preview context, and create a new preview deploy.</p>
+  <div class="info-box">Uploading only dist/ cannot deploy the backend. Real odds require the included server functions. A missing route now shows a setup error, not an automatic demo. Never put your API keys in this page or in public files.</div>
+  <h3>Turn on AI explanations</h3><p>Add an optional <code>OPENAI_API_KEY</code>. The default model is <code>gpt-4.1-mini</code>; override it with <code>OPENAI_MODEL</code>. Without this, the clearly labeled rules-based explainer still works.</p>
+  <h3>Connect recent scores & team form</h3><p>Add optional <code>BALLDONTLIE_API_KEY</code> in Netlify environment variables with Functions scope. The research adapter uses documented teams and completed-games endpoints for NBA, NFL, MLB and NHL. It does not collect this key in the browser. Without it, form cards clearly show setup required, while the odds board still works.</p><p>Scores requests are cached for 15 minutes and run only when requested. Provider access and rate limits apply. See <a href="https://www.balldontlie.io/" target="_blank" rel="noopener noreferrer">BALLDONTLIE documentation</a>. Missing injuries or lineups are not invented.</p><h3>Private My Bets accounts</h3><p>Sign in to your OddsScout account to sync saves and self-reported results privately across devices. Netlify Identity secures sign-in, and server-side storage keeps each account’s history separate. Guest records stay on this browser until you explicitly copy your own records into your account. Winnings sharing is off by default.</p><h3>Keep it in the group chat</h3><p>Set <code>ACCESS_CODE</code> and a separate random <code>ENTRY_SESSION_SECRET</code> privately in Netlify with Functions scope before deploying the full project. The entry popup protects the app and API routes. Share only the entry code with invited users. Changing the code invalidates existing entry sessions.</p>
+  <div class="info-box">Real odds and AI can incur provider charges. All-league loading can use credits for every league, market, and score request. Auto-refresh is off by default. It repeats the selected scope every minute while this page is visible. Set provider spending limits before enabling it.</div>
+  <h3>Save to your phone</h3><p>On iPhone, open your site in Safari, tap Share, then Add to Home Screen. On Android, use your browser’s Add to Home screen option. This is a browser app, not an App Store download.</p>
+  <button class="button primary full-width" data-close="settings-dialog">Back to the board</button>
+ </dialog>
+ <dialog id="guide-dialog" class="modal"><div class="modal-heading"><div><span class="eyebrow">KNOW WHAT YOU’RE COMPARING</span><h2>The numbers, explained.</h2></div><button class="icon-btn" data-close="guide-dialog" aria-label="Close guide">×</button></div>
+  <h3>What “best” actually means</h3><p>The largest payout among fresh, selected-book quotes for an identical game, market, outcome, and line. It is not a best bet, guaranteed winner, or prediction of profitability.</p>
+  <h3>Same line. Same comparison.</h3><p>A team at +3.5 is not the same bet as +4.5. Over 44.5 is not Over 45.5. The app lists them separately. Two-way and three-way moneylines are also kept separate. Book-specific settlement and overtime rules still need checking.</p>
+  <h3>Profit versus total return</h3><p>A hypothetical $25 stake at +140 earns $35 profit if it wins, for $60 returned including the original stake. A $25 stake at −125 earns $20 profit, for $45 total. Losing a bet can lose the entire stake.</p>
+  <h3>What counts as live?</h3><p>A game is labeled live only when the scores feed reports a non-completed event with recent score information. A scheduled start time alone is not proof. Missing or old status goes under Unconfirmed. Feed latency and delayed or suspended games can still affect accuracy.</p>
+  <h3>Freshness and coverage</h3><p>Quotes older than three minutes, missing timestamps, and pre-game quotes on started fixtures are excluded from “best” rankings. Snapshot and book-update times are displayed. All leagues loads every active event league in small batches, not the limited cross-sport shortcut. No app-imposed future-date cutoff is used. All dates shows all returned fixtures; Today, Tomorrow, and Next 7 days use your device’s local time. A partial scan is labeled, including failed leagues. Futures use the provider catalog when selected; game cards are for individual fixtures. Extended markets load in Game Center on demand. Missing coverage is not proof that no game exists.</p>
+  <h3>My Bets &amp; private accounts</h3><p>The Save button saves a private idea; a separate thumbs-up contributes to community popularity; it is not a placed bet. Only record cash wagers you already placed outside OddsScout, using the accepted odds and stake on your receipt. Results and returned amounts are self-reported, not automatically verified or settled. Guest records stay in this browser; anyone sharing the browser profile can access them. Signed-in records are private to your OddsScout account. Demo records never sync to your real account. Community likes count signed-in users independently of private saves and statistical analysis. Popularity never changes a model probability. No sportsbook credentials, deposits or withdrawals are collected.</p><p>Netlify Identity verifies your account and manages session cookies. Cloud bet records are not copied into browser storage. Sign out on shared devices. Use Export CSV to take a copy, and Delete to remove a record. Contact the site owner for account or data deletion requests. Community chat is visible to other signed-in members; public display names appear with messages. All Winnings includes shared totals only after a member explicitly opts in.</p><h3>Your data</h3><p>Watchlist and display preferences stay in this browser. The entry code is verified by the server and is never stored in browser storage. A signed HttpOnly cookie keeps the entry session for up to eight hours. In live mode, the server contacts The Odds API. When AI is enabled, your question and the selected odds snapshot go to OpenAI; this app requests no response storage. Hosting and providers may retain operational logs. Optional paper-research tickets stay in local browser storage; their results are manually marked and hypothetical. No sportsbook bet history, deposits, credentials, or payments are collected. The recent-form server contacts BALLDONTLIE only when requested. Player Stats loads completed-game results from MLB StatsAPI or ESPN publisher data when you ask for them. Missing games and statistics are shown as unavailable.</p>
+  <h3>Use responsibly</h3><p>Ohio support: <a href="tel:18005899966">1-800-589-9966</a> · <a href="https://timeoutohio.com/" target="_blank" rel="noopener noreferrer">Time Out Ohio</a>. National support: <a href="https://www.ncpgambling.org/help-treatment/" target="_blank" rel="noopener noreferrer">1-800-MY-RESET</a>.</p><button class="button" data-open="responsible">Set limits & take a break</button><p>This app is for adults 21 and older. Only use sportsbooks legally available where you are. No location or identity verification is provided. Set your own limits and never treat an AI explanation as a reason to chase losses. <a href="https://www.ncpgambling.org/" target="_blank" rel="noopener noreferrer">Find support through NCPG ↗</a></p>
+  <h3>Data sources</h3><p><a href="https://the-odds-api.com/liveapi/guides/v4/" target="_blank" rel="noopener noreferrer">The Odds API documentation</a> · <a href="https://the-odds-api.com/sports-odds-data/bookmaker-apis.html" target="_blank" rel="noopener noreferrer">Bookmaker coverage</a>. No affiliate or betslip tracking links are used.</p>
+  <button class="button primary full-width" data-close="guide-dialog">Understood</button>
+ </dialog>
+ <dialog id="age-dialog" class="modal compact-modal"><img src="/icon.svg" alt="OddsScout" width="48" height="48"><span class="eyebrow">WELCOME TO ODDSSCOUT</span><h2>Compare the price.<br>Keep perspective.</h2><p>This comparison app is for adults 21 and older. It does not place bets or guarantee results. Only use sportsbooks where lawful.</p><button class="button primary full-width" id="confirm-age">I’m 21 or older · Enter</button><p class="small-print">Your confirmation stays on this device. No date of birth is collected.</p></dialog>
+ <dialog id="room-dialog" class="modal compact-modal"><span class="eyebrow">PRIVATE ROOM</span><h2>You’re with the crew.</h2><p>Enter the room code from the site owner. Do not enter a sportsbook password or API key.</p><form id="room-form"><label for="room-code">Room code</label><input type="password" id="room-code" autocomplete="off" required maxlength="200"><p id="room-error" class="room-error" role="alert"></p><button class="button primary full-width" type="submit">Join the room ↗</button></form></dialog>
+
+ <dialog id="research-dialog" class="modal research-dialog">
+  <div class="modal-heading"><div><span class="eyebrow">ODDSSCOUT RESEARCH</span><h2>Build with evidence.<br>Not with hype.</h2></div><button class="icon-btn" data-close="research-dialog" aria-label="Close parlay research">×</button></div>
+  <div id="research-mode" class="research-data-label">Rules-based research · not a prediction model</div>
+  <p class="research-intro">Explore upcoming moneylines using recent scores and market prices. “Best” here means highest research rank or estimated payout—not a proven winner. Bets are placed only on the sportsbook’s website.</p>
+  <div class="research-layout"><section class="research-main" aria-label="Parlay suggestions">
+   <div class="research-controls"><label>League<select id="research-league"><option value="all">All supported leagues</option><option value="americanfootball_nfl">NFL</option><option value="basketball_nba">NBA</option><option value="baseball_mlb">MLB</option><option value="icehockey_nhl">NHL</option></select></label><label>Recent sample<select id="research-window"><option value="5">Last 5 games</option><option value="10">Last 10 games</option></select></label><label>Ticket size<select id="research-legs"><option value="2">2 legs</option><option value="3">3 legs</option><option value="4">4 legs</option></select></label></div>
+   <div class="research-actions"><button class="button primary" id="research-analyze">Analyze loaded games</button><button class="text-button hidden" id="research-stop">Stop scan</button></div>
+   <p id="research-status" class="research-status" role="status">On demand only. No continuous stats polling. Scans up to eight loaded upcoming games within seven days.</p>
+   <div id="research-results" class="research-results"></div>
+   <details class="research-method"><summary>How these ideas are ranked</summary><p id="research-method"></p><p>Both teams need at least three completed games and a result in the last 21 days. Results are limited to 120 days. Recent win rates are smoothed toward 50% before ranking. Home/away splits use only the displayed sample; they are not full-season records. One higher-ranked outcome per game is considered.</p><p>No opponent-strength adjustment, injury confirmation, starting lineup, weather model, backtested edge, or calibrated win chance is included. No in-play, player-prop, same-game, spread, total, or three-way parlay suggestions are made. The ordinary odds board still supports its existing markets.</p></details>
+  </section><aside id="parlay-ticket" class="parlay-ticket" aria-label="Research ticket">
+   <div class="ticket-heading"><h3>Your research ticket</h3><span id="parlay-leg-count">0/4 legs</span></div>
+   <p class="small-print">All legs must be available at the same app. Nothing here places a wager.</p>
+   <div id="parlay-ticket-legs"></div>
+   <label class="parlay-stake-label" for="parlay-stake">Hypothetical stake ($)<input id="parlay-stake" type="number" min="0" max="100000" step="0.01" inputmode="decimal" value="10"></label>
+   <div id="parlay-compare"></div>
+   <div class="ticket-actions"><button class="button" id="parlay-copy">Copy research</button><button class="button primary" id="parlay-track">☆ Save to My Bets</button><button class="button" id="parlay-save">Save paper ticket</button><button class="text-button" id="parlay-clear">Clear ticket</button></div>
+   <p class="research-alert">Every leg must win. Losing one can lose the entire stake. Void/push and overtime rules can change settlement. A larger payout is not evidence of better value.</p>
+  </aside></div>
+  <section class="paper-tracker"><div class="ticket-heading"><div><h3>Paper tracker</h3><p id="paper-summary" class="muted"></p></div><button class="button" id="paper-export">Export CSV</button></div><p class="small-print">Hypothetical only. You mark results yourself; a saved ticket is not a placed bet. Data stays in this browser and can be deleted.</p><div id="paper-rows"></div></section>
+ </dialog>
+ <dialog id="form-dialog" class="modal form-dialog"><div class="modal-heading"><div><span class="eyebrow">SCORES & SOURCES</span><h2 id="form-title">Recent team form</h2></div><button class="icon-btn" data-close="form-dialog" aria-label="Close team form">×</button></div><div id="form-body"></div></dialog>
+ <dialog id="handoff-dialog" class="modal"><div class="modal-heading"><h2 id="handoff-title">Review sportsbook</h2><button class="icon-btn" data-close="handoff-dialog" aria-label="Close sportsbook review">×</button></div><p id="handoff-price" class="research-alert"></p><p>You will open the sportsbook’s homepage. This does not transfer or place the ticket. Confirm each leg and the actual combined price there.</p><div class="handoff-checks"><label><input type="checkbox" data-handoff-check>I will check each game, selection, market and settlement rule.</label><label><input type="checkbox" data-handoff-check>I understand these combined odds are only an estimate.</label><label><input type="checkbox" data-handoff-check>I am 21+, will verify local eligibility, and will stay within my own limit.</label></div><a id="handoff-link" class="button primary full-width" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">Open sportsbook website ↗</a><p class="small-print">No location verification or bookmaker account access is performed by OddsScout.</p></dialog>
+ <dialog id="copy-ticket-dialog" class="modal"><div class="modal-heading"><h2>Copy your research</h2><button class="icon-btn" data-close="copy-ticket-dialog" aria-label="Close copy ticket">×</button></div><p>Clipboard access is unavailable in this browser. Copy the text below.</p><textarea id="copy-ticket-text" rows="12" readonly aria-label="Research ticket text"></textarea></dialog>
+
+ <div class="toast hidden" id="toast" role="status"></div>
+ <noscript><p class="notice">Enable JavaScript to use the odds comparison board.</p></noscript>
+
+ <dialog id="tracker-dialog" class="modal tracker-dialog">
+  <div class="modal-heading"><div><span class="eyebrow">PRIVATE SAVES &amp; SELF-REPORTED RESULTS</span><h2>My Bets</h2></div><button class="icon-btn" data-close="tracker-dialog" aria-label="Close My Bets">×</button></div>
+  <div class="tracker-toolbar"><label>Record type<select id="tracker-mode"><option value="real">Real bets · self-reported</option></select></label><div class="tracker-tools"><button class="button" id="tracker-account">Sign in / create account</button><button class="button hidden" id="tracker-sync">Sync</button><button class="button" id="tracker-export">Export CSV</button></div></div>
+  <p id="tracker-storage" class="tracker-storage"></p><p id="tracker-message" class="tracker-message" role="status"></p>
+  <div class="tracker-stats" id="tracker-stats"></div>
+  <p id="tracker-disclaimer" class="tracker-disclaimer"></p><p id="tracker-math" class="small-print"></p>
+  <button class="button hidden" id="tracker-import">Copy my guest records to this account</button>
+   <div class="tracker-tabs" role="group" aria-label="Saved bet status"><button data-bet-filter="saved" class="active">☆ Saved</button><button data-bet-filter="open">Placed / pending</button><button data-bet-filter="settled">Settled</button><button data-bet-filter="all">All records</button></div>
+  <div id="tracker-rows" class="tracker-rows"></div>
+  <p class="small-print">This is a record keeper, not a sportsbook wallet. No money is collected or paid out. You can lose your entire stake. 21+ · Use only where lawful.</p>
+ </dialog>
+ <dialog id="place-dialog" class="modal ledger-form-dialog">
+  <div class="modal-heading"><div><span class="eyebrow">SELF-REPORTED · CASH WAGERS ONLY</span><h2 id="place-title">Record placed bet</h2></div><button class="icon-btn" data-close="place-dialog" aria-label="Close placement form">×</button></div>
+  <p id="place-selection" class="ledger-selection"></p><p id="place-note" class="tracker-disclaimer"></p>
+  <form id="place-form"><div class="ledger-form-grid">
+   <label>Sportsbook used<select id="place-book" required></select></label>
+   <label>Cash stake (USD)<input id="place-stake" type="number" min="0.01" max="100000" step="0.01" inputmode="decimal" placeholder="Amount on your receipt" required></label>
+   <label>Accepted odds format<select id="place-format"><option value="american">American (+150 / -110)</option><option value="decimal">Decimal (2.50 / 1.91)</option></select></label>
+   <label>Actual accepted odds<input id="place-odds" type="text" inputmode="text" maxlength="20" required></label>
+   <label>Placed at (your local time)<input id="place-time" type="datetime-local" required></label>
+   <label>When you placed it<select id="place-phase"><option value="upcoming">Before the game</option><option value="live">Live / in-play</option></select></label>
+  </div><label class="ledger-notes">Private note (optional)<textarea id="place-notes" rows="2" maxlength="600" placeholder="Do not enter account passwords, card details or personal identifiers."></textarea></label>
+  <label class="ledger-check"><input id="place-confirm" type="checkbox" required><span id="place-confirm-label"></span></label>
+  <p id="place-error" class="ledger-error" role="alert"></p><button class="button primary full-width" id="place-submit" type="submit">Save placement record — no wager submitted</button></form>
+ </dialog>
+ <dialog id="settle-dialog" class="modal ledger-form-dialog">
+  <div class="modal-heading"><div><span class="eyebrow">CHECK YOUR SPORTSBOOK RECEIPT</span><h2>Record the result</h2></div><button class="icon-btn" data-close="settle-dialog" aria-label="Close result form">×</button></div>
+  <p id="settle-selection" class="ledger-selection"></p><form id="settle-form"><div class="ledger-form-grid">
+   <label>Sportsbook settlement<select id="settle-status"><option value="won">Won</option><option value="lost">Lost</option><option value="push">Push · full stake returned</option><option value="void">Void · full stake returned</option><option value="cashout">Cashout / adjusted payout</option><option value="open">Reopen as pending / correct later</option></select></label>
+   <label>Total cash returned, including stake (USD)<input id="settle-return" type="number" min="0" max="100000000" step="0.01" inputmode="decimal" required></label>
+  </div><p id="settle-help" class="tracker-disclaimer"></p>
+  <label class="ledger-check"><input id="settle-confirm" type="checkbox" required><span>I checked this result and total return. It is self-reported, not verified by OddsScout.</span></label>
+  <p id="settle-error" class="ledger-error" role="alert"></p><button class="button primary full-width" id="settle-submit" type="submit">Save result &amp; update totals</button></form>
+ </dialog>
+ <dialog id="account-dialog" class="modal ledger-form-dialog">
+  <div class="modal-heading"><div><span class="eyebrow">YOUR OWN PRIVATE HISTORY</span><h2 id="account-title">Sign in</h2></div><button class="icon-btn" data-close="account-dialog" aria-label="Close account dialog">×</button></div>
+  <p id="account-current" class="tracker-disclaimer"></p>
+  <p id="account-storage-warning" class="tracker-disclaimer ledger-error hidden" role="status"></p>
+  <div class="auth-options" id="auth-options"><button class="text-button" data-auth-mode="login">Sign in</button><button class="text-button" data-auth-mode="signup">Create account</button><button class="text-button" data-auth-mode="recover">Forgot password?</button></div>
+  <form id="auth-form">
+   <label id="auth-email-wrap">Email<input type="email" id="auth-email" autocomplete="email" maxlength="254" required></label>
+   <label id="auth-name-wrap" class="hidden">Public display name<input type="text" id="auth-name" autocomplete="nickname" minlength="1" maxlength="32" placeholder="Choose a name; keep personal details private"></label>
+   <label id="auth-password-wrap">OddsScout password<input type="password" id="auth-password" autocomplete="current-password" minlength="12" maxlength="128" required></label>
+   <label id="auth-code-wrap" class="hidden">Recovery code from email<input type="text" id="auth-code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6,8}" maxlength="8"></label>
+   <label id="auth-age-wrap" class="ledger-check hidden"><input type="checkbox" id="auth-age"><span>I am 21 or older. I understand this is a comparison and record-keeping app, not a sportsbook.</span></label>
+   <button class="button primary full-width" id="auth-submit" type="submit">Sign in</button>
+  </form><div id="auth-providers" class="auth-providers hidden"></div><div class="account-actions"><button class="button hidden" id="account-password">Change password</button><button class="button hidden" id="account-logout">Sign out of this device</button></div>
+  <p id="auth-error" class="ledger-error" role="status"></p><details class="account-email-help"><summary>Account email opened a different page?</summary><p class="small-print">Copy the confirmation, invitation or recovery link from your email and use it securely in this preview. The link is used only for your account and is never posted to chat.</p><form id="account-email-link-form"><label for="account-email-link">Account link from your email</label><input id="account-email-link" type="url" inputmode="url" autocomplete="off" maxlength="12000" required placeholder="https://…/#confirmation_token=…"><button class="button" id="account-email-link-submit">Use account link in this preview</button></form></details><p class="small-print">Create an account for this app only. Never enter a DraftKings, FanDuel or other sportsbook password here. Netlify Identity secures sign-in. Public chat shows your chosen display name, never your email. Winnings stay private until you choose to share totals. A shared room code is not a personal account.</p>
+ </dialog>
+
+<div id="upgrade-dialogs"></div>
+<div id="social-dialogs"></div>
+</body>
+</html>

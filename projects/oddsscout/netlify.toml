@@ -1,0 +1,103 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+[build.environment]
+  NODE_VERSION = "22"
+[functions]
+  node_bundler = "esbuild"
+# Explicit API rewrites. Functions must be deployed alongside dist/.
+# No SPA wildcard: a missing API must never return index.html.
+[[redirects]]
+  from = "/api/access"
+  to = "/.netlify/functions/access"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/config"
+  to = "/.netlify/functions/config"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/sports"
+  to = "/.netlify/functions/sports"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/board"
+  to = "/.netlify/functions/board"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/calendar"
+  to = "/.netlify/functions/calendar"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/event"
+  to = "/.netlify/functions/event"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/performance"
+  to = "/.netlify/functions/performance"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/ask"
+  to = "/.netlify/functions/ask"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/form"
+  to = "/.netlify/functions/form"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/account"
+  to = "/.netlify/functions/account"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/my-bets"
+  to = "/.netlify/functions/my-bets"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/community"
+  to = "/.netlify/functions/community"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/winnings"
+  to = "/.netlify/functions/winnings"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api-not-found"
+  status = 200
+  force = true
+
+[dev]
+  framework = "#static"
+  publish = "dist"
+  port = 8888
+
+# Secret variables belong in Netlify's environment-variable settings, Functions scope.
+# These headers cover STATIC files. API response headers are set inside each function.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"

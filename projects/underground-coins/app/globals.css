@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+:root { --red:#ef2b2d; --cream:#f1eadb; --ink:#0b0b0b; }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--ink); color:var(--cream); font-family:Arial, Helvetica, sans-serif; }
+a { color:inherit; text-decoration:none; }
+.nav { height:82px; display:flex; align-items:center; justify-content:space-between; padding:0 5vw; border-bottom:1px solid #343434; position:relative; z-index:5; background:#0b0b0b; }
+.brand { display:flex; align-items:center; gap:12px; font-size:13px; font-weight:900; letter-spacing:.12em; }
+.coin-mark { width:42px; height:42px; display:grid; place-items:center; border:2px solid var(--red); border-radius:50%; color:var(--red); font-size:12px; box-shadow:inset 0 0 0 3px #0b0b0b, inset 0 0 0 4px var(--red); }
+.nav-link { font-size:11px; letter-spacing:.16em; color:#bcb8b0; }
+.hero { min-height:680px; position:relative; display:grid; grid-template-columns:1.03fr .97fr; overflow:hidden; border-bottom:1px solid #3b3832; }
+.hero:before { content:""; position:absolute; inset:0; background:linear-gradient(120deg,#10100f 0%,#121211 52%,#2c0d0d 100%); }
+.noise { position:absolute; inset:0; opacity:.2; background-image:radial-gradient(#fff 0.55px,transparent .7px); background-size:5px 5px; mix-blend-mode:overlay; }
+.hero-copy { position:relative; z-index:2; padding:78px 4vw 60px 8vw; }
+.eyebrow { color:#b8b2a7; font-size:11px; letter-spacing:.22em; font-weight:800; display:flex; align-items:center; gap:10px; }
+.eyebrow span { display:inline-block; width:34px; height:2px; background:var(--red); }
+h1,h2 { margin:22px 0; font-size:clamp(64px,7.7vw,126px); line-height:.78; letter-spacing:-.075em; font-weight:950; transform:scaleX(.88); transform-origin:left; width:113%; }
+h1 em,h2 em { color:var(--red); font-style:normal; }
+.subhead { max-width:510px; color:#bdb7ac; font-size:17px; line-height:1.6; }
+.price-row { display:flex; align-items:center; gap:15px; margin:25px 0 16px; }
+.price { font-size:70px; line-height:1; font-weight:950; color:var(--red); letter-spacing:-.08em; }
+.price sup { font-size:27px; vertical-align:top; position:relative; top:8px; margin-right:3px; }
+.price-copy { font-size:13px; font-weight:900; line-height:1.45; letter-spacing:.08em; }
+.price-copy span { color:#77736d; font-size:9px; }
+.enter-button { width:min(400px,100%); border:0; background:var(--red); color:white; padding:19px 24px; font-size:12px; font-weight:900; letter-spacing:.15em; display:flex; justify-content:space-between; cursor:pointer; transition:transform .18s ease, background .18s ease; }
+.enter-button:hover { transform:translateY(-2px); background:#ff3a3d; }
+.enter-button:focus-visible { outline:3px solid var(--cream); outline-offset:4px; }
+.secure-note { width:min(400px,100%); text-align:center; color:#66625d; font-size:9px; letter-spacing:.1em; }
+.ticket-stage { position:relative; z-index:2; min-height:620px; display:flex; align-items:center; justify-content:center; perspective:1200px; }
+.glow { position:absolute; width:520px; height:520px; background:var(--red); opacity:.14; filter:blur(80px); border-radius:50%; }
+.sixers-logo { position:absolute; width:126px; height:126px; object-fit:contain; top:48px; right:8%; filter:drop-shadow(0 15px 22px #0008); transform:rotate(7deg); z-index:3; }
+.jersey { position:absolute; width:168px; height:205px; left:2%; bottom:65px; z-index:1; background:#0755a0; clip-path:polygon(21% 0,38% 8%,62% 8%,79% 0,100% 20%,82% 38%,82% 100%,18% 100%,18% 38%,0 20%); color:white; display:flex; flex-direction:column; align-items:center; padding-top:27px; transform:rotate(-13deg); box-shadow:inset 0 0 0 5px #fff, 0 25px 40px #0009; }
+.jersey:before,.jersey:after { content:""; position:absolute; top:0; width:24px; height:42px; background:#d9232e; }
+.jersey:before { left:17px; transform:rotate(28deg); }
+.jersey:after { right:17px; transform:rotate(-28deg); }
+.jersey-neck { position:absolute; top:-3px; width:47px; height:28px; border:6px solid #d9232e; border-top:0; border-radius:0 0 26px 26px; background:#0b0b0b; }
+.jersey-city { font-size:17px; font-weight:950; letter-spacing:.08em; margin-top:15px; }
+.jersey strong { font-size:79px; line-height:.9; letter-spacing:-.08em; text-shadow:3px 3px 0 #d9232e; }
+.jersey-name { font-size:11px; font-weight:900; letter-spacing:.17em; }
+.ticket { position:absolute; width:min(450px,80%); height:245px; background:#e9e0cf; color:#111; border-radius:10px; box-shadow:0 35px 70px #000a; overflow:hidden; }
+.ticket-back { transform:rotate(10deg) translate(36px,-10px); background:#a31318; color:#e6c8bd; padding:25px; display:flex; justify-content:space-between; font-size:10px; letter-spacing:.14em; }
+.ticket-back strong { font-size:18px; }
+.ticket-front { transform:rotate(-7deg); display:grid; grid-template-columns:1fr 95px; grid-template-rows:50px 1fr; }
+.ticket-top { grid-column:1/-1; background:#d92329; color:white; display:flex; align-items:center; justify-content:space-between; padding:0 18px; font-size:10px; font-weight:900; letter-spacing:.15em; }
+.ticket-top b { font-size:32px; }
+.ticket-main { padding:25px; display:flex; flex-direction:column; }
+.ticket-main small { font-size:9px; letter-spacing:.13em; font-weight:900; }
+.ticket-main strong { color:#d92329; font-size:80px; line-height:.95; letter-spacing:-.08em; }
+.ticket-main span { font-size:20px; font-weight:950; letter-spacing:.08em; }
+.ticket-stub { border-left:2px dashed #b8ad99; display:flex; flex-direction:column; justify-content:center; align-items:center; writing-mode:vertical-rl; gap:10px; font-size:9px; }
+.ticket-stub strong { font-size:14px; }
+.package-label { position:absolute; bottom:70px; font-size:9px; letter-spacing:.18em; color:#8c8780; }
+.countdown-wrap { background:var(--cream); color:#111; padding:22px 5vw; display:flex; justify-content:center; align-items:center; gap:5vw; }
+.countdown-wrap>p { font-size:10px; font-weight:900; letter-spacing:.15em; }
+.countdown { display:flex; }
+.time-block { min-width:84px; text-align:center; border-left:1px solid #bdb5a5; }
+.time-block:last-child { border-right:1px solid #bdb5a5; }
+.time-block strong { display:block; font-size:29px; letter-spacing:-.04em; }
+.time-block span { display:block; font-size:8px; text-transform:uppercase; letter-spacing:.14em; color:#777165; }
+.details { padding:90px 8vw 50px; background:#0b0b0b; }
+.details h2 { font-size:clamp(48px,6vw,92px); line-height:.85; }
+.detail-grid { display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid #3a3936; border-bottom:1px solid #3a3936; }
+.detail-grid article { padding:32px; border-right:1px solid #3a3936; }
+.detail-grid article:last-child { border-right:0; }
+.number { color:var(--red); font-size:11px; font-weight:900; }
+.detail-grid h3 { font-size:17px; margin:32px 0 12px; }
+.detail-grid p { color:#8c8881; line-height:1.6; font-size:13px; }
+.legal { color:#5f5c57; font-size:9px; line-height:1.6; margin:35px auto 0; max-width:850px; text-align:center; }
+@media (max-width:800px) {
+  .nav { height:70px; padding:0 20px; }
+  .nav-link { display:none; }
+  .hero { grid-template-columns:1fr; }
+  .hero-copy { padding:55px 24px 20px; }
+  h1 { font-size:67px; }
+  .ticket-stage { min-height:410px; }
+  .sixers-logo { width:82px; height:82px; top:20px; right:4%; }
+  .jersey { width:112px; height:142px; left:-3%; bottom:45px; }
+  .jersey strong { font-size:50px; }
+  .jersey-city { font-size:11px; margin-top:8px; }
+  .jersey-name { font-size:8px; }
+  .ticket { width:82%; height:205px; }
+  .ticket-main strong { font-size:62px; }
+  .package-label { bottom:35px; text-align:center; }
+  .countdown-wrap { flex-direction:column; gap:12px; padding:20px 10px; }
+  .countdown-wrap>p { text-align:center; }
+  .time-block { min-width:72px; }
+  .details { padding:65px 24px 40px; }
+  .detail-grid { grid-template-columns:1fr; }
+  .detail-grid article { border-right:0; border-bottom:1px solid #3a3936; }
+}
